@@ -25,11 +25,7 @@
       <module>1-data-types-control-structures</module>
       <module>2-objects-classes-inheritance</module>
       <module>3-collections</module>
-      <module>4-file-io-serialization</module>
-      <module>5-socket-io-serialization</module>
-        <module>6-concurrency</module>
-        <module>6-jdbc</module>
-        <module>7-jdbc</module>
+      <module>4-socket-io-serialization</module>
     </modules>
 
     <build>

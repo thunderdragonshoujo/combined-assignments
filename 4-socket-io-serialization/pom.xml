@@ -10,7 +10,7 @@
       <version>${ftd.assignments.version}</version>
     </parent>
 
-    <artifactId>5-socket-io-serialization</artifactId>
+    <artifactId>4-socket-io-serialization</artifactId>
     <version>${ftd.assignments.version}</version>
 
 </project>
