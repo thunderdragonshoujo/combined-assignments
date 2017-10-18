@@ -1,13 +1,23 @@
 package com.cooksys.ftd.assignments.collections;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 import com.cooksys.ftd.assignments.collections.hierarchy.Hierarchy;
 import com.cooksys.ftd.assignments.collections.model.Capitalist;
 import com.cooksys.ftd.assignments.collections.model.FatCat;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.*;
+import com.cooksys.ftd.assignments.collections.model.WageSlave;
 
 public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
+	private Set<Capitalist> hierarchy;
+	public MegaCorp()
+	{
+		hierarchy = new TreeSet<Capitalist>();
+	}
 
     /**
      * Adds a given element to the hierarchy.
@@ -29,7 +39,15 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
      */
     @Override
     public boolean add(Capitalist capitalist) {
-        throw new NotImplementedException();
+    	if (capitalist == null || !capitalist.hasParent() && capitalist instanceof WageSlave)
+        {
+        	return false;
+        }
+    	else
+    	{
+    		add(capitalist.getParent());
+    	}
+    	return hierarchy.add(capitalist);
     }
 
     /**
@@ -38,7 +56,7 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
      */
     @Override
     public boolean has(Capitalist capitalist) {
-        throw new NotImplementedException();
+        return hierarchy.contains(capitalist);
     }
 
     /**
@@ -47,7 +65,9 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
      */
     @Override
     public Set<Capitalist> getElements() {
-        throw new NotImplementedException();
+    	Set<Capitalist> cap = new TreeSet<>();
+    	cap.addAll(hierarchy);
+    	return cap;
     }
 
     /**
@@ -56,7 +76,13 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
      */
     @Override
     public Set<FatCat> getParents() {
-        throw new NotImplementedException();
+    	Set<FatCat> fc = new TreeSet<>();
+    	// Add all the fat cats to the returnSet
+    	hierarchy.
+    		stream().
+    		filter(c -> c instanceof FatCat).
+    		forEach(c -> fc.add((FatCat) c));
+    	return fc;
     }
 
     /**
@@ -67,8 +93,28 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
      */
     @Override
     public Set<Capitalist> getChildren(FatCat fatCat) {
-        throw new NotImplementedException();
+    	Set<Capitalist> returnSet = new TreeSet<>();
+    	// Make sure fatCat is in the hierarchy
+    	if (has(fatCat))
+    	{
+    		for (Capitalist c : hierarchy)
+    		{
+    			if (c.hasParent())
+    			{
+    				// If the fatCat is equal to the parent of the capitalist in the hierarchy
+    				// add it to the return set
+					if (c.getParent().equals(fatCat))
+					{
+						returnSet.add(c);
+					}
+    			}
+    		}
+    	}
+    	
+    	return returnSet;
     }
+
+    
 
     /**
      * @return a map in which the keys represent the parent elements in the hierarchy,
@@ -77,7 +123,13 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
      */
     @Override
     public Map<FatCat, Set<Capitalist>> getHierarchy() {
-        throw new NotImplementedException();
+    	Map<FatCat, Set<Capitalist>> returnMap = new TreeMap<>();
+        // Go through each element in the hierarchy as the parent to find each parents children
+        hierarchy.
+        	stream().
+        	filter(c -> c instanceof FatCat).
+        	forEach(parent -> returnMap.put((FatCat) parent, getChildren((FatCat) parent)));   
+        return returnMap;
     }
 
     /**
@@ -88,6 +140,33 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
      */
     @Override
     public List<FatCat> getParentChain(Capitalist capitalist) {
-        throw new NotImplementedException();
+    	List<FatCat> returnSet = new ArrayList<FatCat>();
+    	// Make sure capitalist isn't null and its in the list
+    	if (capitalist == null || !has(capitalist.getParent()))
+    	{
+    		return returnSet;
+    	}
+    	// While there is a parent to move up to in the chain
+    	while (capitalist.hasParent())
+    	{
+    		// Go through each capitalist in the hierarchy to find the next parent in the chain.
+    		// When it is found, add the parent to the list and move on to that capitalist to find
+    		// its next parent and repeat.
+    		for (Capitalist c : hierarchy)
+    		{
+    			if (capitalist.hasParent())
+    			{
+					if (capitalist.getParent().equals(c))
+					{
+						returnSet.add(capitalist.getParent());
+						capitalist = capitalist.getParent();
+					}
+    			}
+    		}
+    	}
+    	
+    	return returnSet;
     }
-}
+
+    }
+
