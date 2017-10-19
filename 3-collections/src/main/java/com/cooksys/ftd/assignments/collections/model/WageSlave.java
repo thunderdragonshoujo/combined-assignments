@@ -58,7 +58,9 @@ public class WageSlave implements Capitalist {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		result = prime * result + salary;
 		return result;
 	}
 
@@ -71,10 +73,17 @@ public class WageSlave implements Capitalist {
 		if (getClass() != obj.getClass())
 			return false;
 		WageSlave other = (WageSlave) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		if (owner == null) {
 			if (other.owner != null)
 				return false;
 		} else if (!owner.equals(other.owner))
+			return false;
+		if (salary != other.salary)
 			return false;
 		return true;
 	}
