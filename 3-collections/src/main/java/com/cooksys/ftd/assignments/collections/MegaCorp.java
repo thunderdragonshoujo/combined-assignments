@@ -49,7 +49,7 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
     	}
     	return hierarchy.add(capitalist);
     }
-
+ 
     /**
      * @param capitalist the element to search for
      * @return true if the element has been added to the hierarchy, false otherwise
@@ -76,7 +76,7 @@ public class MegaCorp implements Hierarchy<Capitalist, FatCat> {
      */
     @Override
     public Set<FatCat> getParents() {
-    	Set<FatCat> returnSet = new HashSet<>();
+    	Set<FatCat> returnSet = new HashSet<>(); 
     	hierarchy.
     		stream().
     		filter(c -> c instanceof FatCat).
